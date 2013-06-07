@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">World of Workout</string>
+    <string name="action_settings">Menu</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="start_button">Start GPS</string>
+    <string name="latitude"/>
+    <string name="stats">GPS Stats</string>
+    <string name="stop">Stop Tracking</string>
+    <string name="login">Login</string>
+    <string name="exit">Exit</string>
+    <string name="map">Map</string>
+    <string name="accel">Acceleromeasure</string>
+    <string name="gamemaps">View Game Maps</string>
+    <string name="starter">Exercise Points Recorded</string>
+    <string name="jacker">Jumping Jacks Recorded</string>
+    <string name="cruncher">Crunches Recorded</string>
+    <string name="stopaccel">Stop tracking</string>
+    <string name="exerciser">Start Exercising</string>
+    
+    <string name="exercise_prompt">Choose the exercise being performed</string>
+ 
+    <string-array name="exercise_arrays">
+        <item>Sprints</item>
+        <item>Biking</item>
+        <item>Walking</item>
+        <item>Distance Running</item>
+        <item>Weight Lifting</item>
+        <item>Pushups</item>
+        <item>Crunches</item>
+        <item>Jumping Jacks</item>
+        <item>Other GPS exercise</item>
+        <item>Other accelerometer exercise</item>
+    </string-array>
+
+</resources>

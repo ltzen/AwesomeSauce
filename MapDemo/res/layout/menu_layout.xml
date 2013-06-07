@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/exerciser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/exerciser" />
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/start_button" />
+
+    <Button
+        android:id="@+id/stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/stats" />
+    
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/login" />
+
+    <Button
+        android:id="@+id/accelerometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/accel" />
+
+    <Button
+        android:id="@+id/game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/gamemaps" />
+
+    <Button
+        android:id="@+id/exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/exit" />
+
+</LinearLayout>
