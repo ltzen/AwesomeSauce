@@ -1,0 +1,88 @@
+<?php 
+
+// hide server info for security
+require_once '../databaseConnect.php';
+require_once '../memberClass.php';
+$membership = New Membership();
+$membership->confirm_Member();
+$mysql = New Mysql();
+$tempID=$mysql->get_MemberID($_SESSION['un']);
+
+$link = mysql_connect(DB_HOST, DB_USERNAME, DB_PASSWORD); 
+if (!$link) { die('Could not connect to MySQL: ' . mysql_error());
+} mysql_select_db(DB_DEFAULT_DB, $link);
+
+if($_POST){
+
+	
+	$monitor = $_POST['monitor'];	
+	$name = $_POST['name'];
+	$descrip = $_POST['description'];
+	$type = $_POST['type'];
+	$serial = $_POST['serial'];
+	
+	if (!empty($serial)){ 
+		$insert="INSERT INTO circuit (Monitor, Name , Description, Type, Serial)VALUES ('".$monitor."', '".$name."', '".$descrip."', '".$type."', '".$serial."')";
+		
+		if(mysql_query($insert)){
+			$response='You have successfully registered.';
+		}else{
+			$response=mysql_error();
+		}
+
+	} else{ 
+		$response='Please try again.'; 
+	}
+}
+
+?> 
+ 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link href="../CSS/register.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Registration Page</title>
+</head>
+
+ 
+<body>
+	<div>
+		<h2>Register</h2>
+		<form method="post" action="registerCircuits.php"> 
+		<p>
+		<?php 
+			$monIDs = $mysql->get_MonitorID($tempID);
+			if($monIDs<0){
+				echo '<label>Choose your monitor:</label>';
+				foreach($monIDs as $value){
+					echo '<input type="radio" name="monitor" value='.$value.'> '.$mysql->get_MonitorSerial($value). '<br>';			
+				}
+			}
+		?>
+		</p>
+		<p>
+		<label>Name:</label> &nbsp <input type="text" name="name" />
+		</p>
+		<p>
+		<label>Description:</label> &nbsp <input type="text" name="description" />
+		</p>
+		<p>
+		<label>Type:</label> &nbsp <input type="text" name="type" />
+		</p>
+		<p>
+		<label>Gateway ID Number:</label> &nbsp <input type="text" name="serial" />
+		</p>
+		<input type="submit" value="Register" name="submit" /> 
+		</form>		
+		<br />
+	<?php if(isset($response)) echo $response;
+	echo '<br />';
+	?>
+	
+	<br /><br />
+	
+	<a href="index.php">Back to the main menu</a>
+	
+	</div>
+</body>
+</html>

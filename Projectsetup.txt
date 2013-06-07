@@ -1,0 +1,6 @@
+When starting the project you will get a lot of errors, to fix them make sure you fix the project properties:
+1. Right-click->Import->Android->Existing->Next
+2. Click browse, navigate to wherever your SDK is located sdk\extras\google\google_play_services\libproject and select the only folder in there
+3. Once the google play library is imported go to project->properties->Android, under library click add then google play will be the only thing there
+4. Stay in the properties window, go to java build path->libraries->add external jar. browse to SDK sdk\extras\android\support\v4 add android-support-v4
+5. Finally copy the debug in the gitrepo into your .android folder which should be located at C:\Users\you_username\.android

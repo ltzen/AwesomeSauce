@@ -1,0 +1,182 @@
+@charset "utf-8";
+
+html {
+	width:100%;
+	background-image: url("../images/stars.jpg");
+	background-repeat: repeat;
+}
+
+body{
+	width: 1080px;
+	margin: 0 auto 1%;
+}
+
+header{
+	width: 90%;
+	height: 222px;
+	margin: 0 auto;
+}
+
+.content{
+	width: 90%;
+	height: 900px;
+	margin: 0 auto;
+}
+
+.contentbg{
+	width: 90%;
+	height: 900px;
+	margin: 0 auto;
+	background-color: #222222;	
+}
+
+.bar{
+	background-image: url("../images/border.jpg");
+	background-repeat:repeat-x;
+	height: 45px;
+	width: 90%;
+	margin: 0 auto 1%;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.leftColumn{
+	position:relative;
+	height: 100%;
+	width: 25%;
+	float: left;
+}
+
+.login{
+	height: 35%;
+	width: 100%;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #333;
+	/*
+	border-style:solid;
+	border-width:1px;
+	border-color: #fff;
+	*/
+}
+
+.loginWrap{
+	margin:0 5%;
+	width: 100%;
+}
+
+.demo{
+	height: 64%;
+	width: 100%;
+	margin-top:4%;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #333;
+	/*border-style:solid;
+	border-width:1px;
+	border-color: #fff;
+	*/
+}
+
+.rightColumn{	
+	position:relative;
+	height: 100%;
+	width: 74%;
+	float: right;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #333;
+	/*
+	border-style:solid;
+	border-width:1px;
+	border-color: #fff;
+	*/
+}
+
+.output{
+	color:#ccc;
+	padding: 10px;
+}
+
+h1{
+	margin: 0;
+	padding: 5px;
+	color: #fff;
+}
+
+unpw{
+	margin: 0;
+	padding: 5px;
+	font-size: 20px;
+	color: #ccc;	
+}
+
+input#form1{
+	width: 70%;
+	margin: 5px;
+	height: 18px;
+	background-color: #ccc;
+	font-color: #333;
+}
+
+input#submit{
+	margin: 5px;
+}
+
+#cssmenu ul
+{
+	margin:0 auto 1%;
+	padding:0;
+	list-style-type:none;
+	width:90%;
+	position:relative;
+	display:block;
+	height:45px;
+	font-size:24px;
+	font-weight:bold;
+	background:transparent url(../images/border.jpg) repeat-x top left;
+	font-family:Arial, Helvetica, sans-serif;
+	border-bottom:1px solid #000000;
+	border-top:1px solid #000000;
+}
+
+#cssmenu li
+{
+	display:block;
+	float:left;
+	margin:0;
+	padding:0;
+}
+	
+#cssmenu li a
+{
+	display:block;
+	float:left;
+	color:#999999;
+	text-decoration:none;
+	font-weight:bold;
+	padding:8px 20px 0 20px;
+}
+	
+#cssmenu li a:hover
+{	
+	color:#FFFFFF;
+	height:42px;
+	background:transparent url(../images/nav_bg.png) 0px -16px no-repeat;
+}
+	
+
+#cssmenu li.active a
+{
+	color:#FFF;
+	height:42px;
+	background:transparent url(images/nav_bg.png) 0px -16px no-repeat;	
+}

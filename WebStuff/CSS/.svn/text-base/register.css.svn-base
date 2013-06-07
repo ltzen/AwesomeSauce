@@ -1,0 +1,6 @@
+@charset "utf-8";
+
+label {
+  float: left;
+  width: 175px;
+}

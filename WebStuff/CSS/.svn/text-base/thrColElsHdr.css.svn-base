@@ -1,0 +1,158 @@
+@charset "utf-8";
+
+body  {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:14px;
+	background: url(../images/Background.jpg);
+	margin: 0; /* to account for differing browser defaults */
+	padding: 0;
+	text-align: center; /* centers the container in IE 5* browsers.*/
+	color: #000000;
+}
+A, A:visited { color: #666666; text-decoration:none; }
+A:hover { color: #3366FF; text-decoration:none; }
+
+.thrColElsHdr #container {
+	width:1024px;
+	background: #FFFFFF;
+	margin: 0px auto; /* the auto margins (in conjunction with a width) center the page */
+	border: 1px solid #000000;
+	text-align: left; /* this overrides the text-align: center on the body element. */
+	position:relative;
+	top: 0;
+} 
+.thrColElsHdr #header { 
+	background: #DDDDDD; 
+	background-image: url(../images/TitleHeader2.jpg);
+	margin: 0px;
+	height:200px;
+} 
+.thrColElsHdr #navbar {
+	padding-top:176px;	/* nav menu starts at 176px from top */
+	padding-bottom: 0px;
+}
+
+/* This is the box that shows our climate impact or other info */
+#apInfoBox {
+	position: absolute;
+	width:220px;
+	height:150px;
+	z-index:10;
+	left: 416px;
+	top: 230px;
+}
+#apInfoText {
+	position: absolute;
+	width:218px;
+	z-index:20;
+	left: 7px;
+	top: 5px;
+}
+
+.thrColElsHdr #header h1 {
+	margin: 0px;
+	padding: 0px 0px;
+}
+
+/*  sidebars:
+*/
+.thrColElsHdr #sidebar1 {
+	float: left;
+	width: 23%; /* since this element is floated, a width must be given */
+	/*background: #EBEBEB; */
+	padding: 15px 0; /* top and bottom padding create visual space within this div */
+	height:600px;
+	border-right: thin;
+	border-right-style:solid;
+	border-right-color:#000000;
+}
+.thrColElsHdr #sidebar2 {
+	float: right; 
+	width: 25%; /* since this element is floated, a width must be given */
+	background: #CCFF99; 
+	padding: 15px 0; /* top and bottom padding create visual space within this div */
+	height: 600px;
+	border-left:thin;
+	border-left-style:solid;
+	border-left-color:#000000;
+}
+.thrColElsHdr #sidebar1 h3, .thrColElsHdr #sidebar1 p, .thrColElsHdr #sidebar2 p, .thrColElsHdr #sidebar2 h3 {
+	margin-left: 10px; /* the left and right margin should be given to every element that will be placed in the side columns */
+	margin-right: 10px;
+}
+
+/* mainContent
+ */
+.thrColElsHdr #mainContent {
+	margin: 0 25% 0 23%; 
+ 	/*margin: 0 12em 0 12em; /* the right margin can be given in ems or pixels. It creates the space down the right side of the page. */
+} 
+
+.thrColElsHdr #quote {
+	margin-top: 50px;
+	margin-bottom:50px;
+	text-align: center;
+}
+.thrColElsHdr #footer { 
+	padding: 0 10px; 
+	background:#DDDDDD; 
+	font-size: 10px;
+	font-weight: 200;
+	color: #667667;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #000000;
+} 
+.thrColElsHdr #footer p {
+	margin: 0; /* zeroing the margins of the first element in the footer will avoid the possibility of margin collapse - a space between divs */
+	padding: 10px 0; /* padding on this element will create space, just as the the margin would have, without the margin collapse issue */
+}
+
+/* Miscellaneous classes for reuse */
+.fltrt { /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* this class can be used to float an element left in your page */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* this class should be placed on a div or break element and should be the final element before the close of a container that should fully contain a float */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+.thrColElsHdr #sidebar1 ul {
+	margin:0;
+}
+.thrColElsHdr #sidebar1 td {
+	font: Arial;
+	font-size:12px;
+	font-weight:normal;
+	color: #667667; 
+}
+.txHd {
+	font-size: 18px;
+	font-weight: bolder;
+	font-variant: normal;
+	text-transform: none;
+	color: #990000;
+}
+.txItem {
+	font-size:14px;
+	font-weight: normal;
+	font-variant: small-caps;
+	color: #000000;
+}
+.txNorm {
+/*	font:inherit; */
+	font-size:14px;
+	font-weight:normal;
+	color: #666666; 
+}
+.txInput {
+	font-size:16px;
+	font-weight:normal;
+	color: #000000; 
+}

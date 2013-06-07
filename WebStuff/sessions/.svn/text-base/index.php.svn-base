@@ -1,0 +1,128 @@
+<?php
+require_once '../memberClass.php';
+$membership = New Membership();
+$membership->confirm_Member();
+$tempUN=$_SESSION['un'];
+$mysql = New Mysql();
+$tempID=$mysql->get_MemberID($tempUN);
+//$MemberGateID=$mysql->get_MemberGATEID($tempID);
+//$MemberInfo=$mysql->get_GateInfo($MemberGateID);
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<script type="text/javascript" src="../javascript/raphael.js"></script>
+<script type="text/javascript" src="../javascript/g.raphael.js"></script>
+<script type="text/javascript" src="../javascript/g.pie.js"></script>
+<script type="text/javascript" src="../javascript/g.line.js"></script>
+<script type="text/javascript" src="../javascript/g.dot.js"></script>
+<script type="text/javascript" src="../javascript/g.bar.js"></script>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Index</title>
+<script src="../javascript/ico/ico.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+
+<!-- JavaScript ***************-->
+
+<script type="text/javascript" charset="utf-8">
+            window.onload = function () {
+                
+                var paper = Raphael(100, 250, 800, 600);   
+                var headingText = paper.text(300, 60, "Watts/Second");
+                var bord = paper.rect(0, 0, 640, 480);
+                headingText.attr({'font-size':36});
+                
+                paper.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
+                
+                var lines = paper.g.linechart(65, 120, 480, 320, [[1,2,3,4,5,6,7,8,9], [1,2,3,4,5,6,7,8,9]],[[30, 5, 1, 10, 15, 18, 20, 25, 1],[10, 9, 3, 30, 1, 10, 5, 33, 33]], {gutter: 10, nostroke: false, axis: "0 1 1 1", symbol: "o", axisxstep: 10, smooth: true})
+                lines.symbols.attr({r: 3});
+            } 
+        </script>
+
+<div>
+	<p>
+    	Logged in.
+    </p>
+ </div>
+ 
+
+ <div>   
+<a href="registerMonitor.php">Register your Monitors.</a>
+<br />
+<a href="registerCircuits.php">Register your Circuits.</a>
+ 
+ 
+<?php
+ 	echo $tempID;
+	echo '<div align="right"><h1>Welcome, '.$mysql->get_MemberFirstNAME($tempID).'!</h1></div><br/>';
+	echo '<div align="center">Your current address is '.$mysql->get_MemberADDRESS($tempID).'<br/>';
+	$currentTime = time();
+	echo $currentTime;
+/*	echo 'Your Gateway ID is '.$MemberGateID.'</div>';
+    echo "
+    <br/>	
+    <br/>
+    <br/>
+    <br/>
+    <br/>";
+    **********new side table********
+	echo '<div style="margin-left:60px"><table border="1" cellpadding="8"><tr>
+        <th>Timestamp</th>
+        <th>Watts</th>
+        </tr>';
+
+		for ($i=0; $i<4; $i++){
+			echo "<tr>";
+			for ($j=0; $j<2; $j++){
+				echo "<td>".$MemberInfo[$i][$j].'</td>';
+			}
+			echo "</tr>";
+		}
+		echo "</table></div>";
+		
+//editing timestamp into hour of the day, and watts into kilowatts
+	$currentTime = time();
+	echo $currentTime.'</br>';
+	for ($i=0; $i<4; $i++){
+		$MemberInfo[$i][0]%=86400;
+		$MemberInfo[$i][1]/=1000;
+		$MemberInfo[$i][1] = round($MemberInfo[$i][1]);
+	}
+	echo '<div style="margin-left:60px"><table border="1" cellpadding="8"><tr>
+        <th>hour</th>
+        <th>Kilowatts</th>
+        </tr>';
+
+	for ($i=0; $i<4; $i++){
+		echo "<tr>";
+		for ($j=0; $j<2; $j++){
+			echo "<td>".$MemberInfo[$i][$j].'</td>';
+		}
+		echo "</tr>";
+	}
+	echo "</table></div>";
+   
+*/
+?>
+
+</div>
+<div id="linegraph" style=" margin: 30px 0px 0px 800px ; height:480px; width:600px;"></div>
+<br/>
+<div>
+    <a href="../login.php?status=loggedout">Log Out</a>
+</div>
+<script type="text/javascript">
+	new Ico.LineGraph(document.getElementById('linegraph'), {
+		  one: [30, 5, 1, 10, 15, 18, 20, 25, 1],
+		  two: [10, 9, 3, 30, 1, 10, 5, 33, 33]
+		}, {
+		  markers: 'circle',
+		  colours: { one: '#990000', two: '#009900'},
+		  meanline: true,
+		  grid: true,
+		}
+	);
+</script>
+</body>
+</html>

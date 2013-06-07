@@ -1,0 +1,90 @@
+<?php 
+
+// hide server info for security
+require_once '../databaseConnect.php';
+require_once '../memberClass.php';
+require_once 'randomPasswordGenerator.php';
+$membership = New Membership();
+$membership->confirm_Member();
+$mysql = New Mysql();
+
+
+$link = mysql_connect(DB_HOST, DB_USERNAME, DB_PASSWORD); 
+if (!$link) { die('Could not connect to MySQL: ' . mysql_error());
+} mysql_select_db(DB_DEFAULT_DB, $link);
+
+$storedPassword = createRandomPassword();;
+
+if($_POST){
+	
+	$customer = $_SESSION['id'];
+	$serial = $_POST['serial'];
+	$lat = $_POST['latitude'];
+	$lon = $_POST['longitude'];
+	$descrip = $_POST['description'];
+	$type = $_POST['type'];
+	$token = $storedPassword;
+	
+	if (!empty($serial)){ 
+		$insert="INSERT INTO monitor (Customer, Serial, Lat, Lon, Description, Type, SecurityToken)VALUES ('".$customer."', '".$serial."', '".$lat."', '".$lon."', '".$descrip."', '".$type."', '".$token."')";
+		
+		if(mysql_query($insert)){
+			$response='You have successfully registered.'.'<br />'.'Your Token is '.$storedPassword.'<br />'.'Please store this code, and use it when activating posing from TED footprint.';
+		}else{
+			$response=mysql_error();
+		}
+
+	} else{ 
+		$response='Please try again.'; 
+	}
+}
+
+?> 
+ 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link href="CSS/register.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Registration Page</title>
+</head>
+
+ 
+<body>
+	<div>
+		<h2>Register</h2>
+		<form method="post" action="registerMonitor.php"> 
+		<p>
+		<label>Gateway ID Number:</label> &nbsp <input type="text" name="serial" />
+		</p>
+		<p>
+		<label>Gateway Location Latitude:</label> &nbsp <input type="text" name="latitude" />
+		</p>
+		<p>
+		<label>Gateway Location Longitude:</label> &nbsp <input type="text" name="longitude" /> 
+		</p>
+		<p>
+		<label>Description:</label> &nbsp <input type="text" name="description" />
+		</p>
+		<p>
+		<label>Type:</label> &nbsp <input type="text" name="type" />
+		</p>
+		
+		<input type="submit" value="Register" name="submit" /> 
+		</form>
+		
+		<br />
+		
+		<a href="http://itouchmap.com/latlong.html">You can find your lon/lat here.</a>
+		
+		<br />
+	<?php if(isset($response)) echo $response;
+
+	?>
+	
+	<br /><br />
+	
+	<a href="index.php">Back to the main menu</a>
+	
+	</div>
+</body>
+</html>
