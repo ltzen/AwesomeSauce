@@ -327,6 +327,20 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
+		String str = "monster";
+		
+		/*Enemy enemy3 = new Enemy(new int[]{2,1,1,2}, 28*TILE_DIM, 27*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
+		//final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
+		mEnemyBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, enemy, BodyType.KinematicBody, enemyFixtureDef);
+		mEnemyBody.setLinearVelocity(0, 0);
+		mEnemyBody.setUserData(str);
+		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(enemy, mEnemyBody, true, false){
+			@Override
+			public void onUpdate(float pSecondsElapsed){
+				super.onUpdate(pSecondsElapsed);
+			}
+		});
+		*/
 		mEnemyTimer = new Timer(2, new Timer.ITimerCallback() {
 		    @Override
 			public void onTick() {
@@ -344,8 +358,12 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    	setBodyVelocity(enemy.getObjDirectionInt(), mEnemyBody, enemy.getSpeed());
 		    }
 		});		
+		
+		
 		enemy.registerUpdateHandler(mEnemyTimer);
+		//enemy3.registerUpdateHandler(mEnemyTimer);
 		mScene.attachChild(enemy);
+		//mScene.attachChild(enemy3);
 		
 		// Create the second enemy sprite and add it to the scene
 		face = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFaceTextureRegion, this.getVertexBufferObjectManager());
@@ -377,7 +395,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    	setBodyVelocity(face.getObjDirectionInt(), mFaceBody, face.getSpeed());
 		    }
 		});		
-		face.registerUpdateHandler(mEnemyTimer2);
+		//face.registerUpdateHandler(mEnemyTimer2);
+		face.registerUpdateHandler(makeTimer(face, mFaceBody));
 		mScene.attachChild(face);
 		
 		// Add the control
@@ -433,6 +452,27 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		return mScene;
 	}
 	
+	Timer makeTimer(final Enemy localEnemy, final Body enemyBody){
+		Timer test = new Timer(2, new Timer.ITimerCallback() {
+		    @Override
+			public void onTick() {
+		        // move enemy towards player
+		    	double dx = player.getX() - localEnemy.getX();
+		    	double dy = player.getY() - localEnemy.getY();
+		    	if(Math.abs(dx)>Math.abs(dy)) {
+		    		if(dx>0) localEnemy.move2(4);
+		    		else localEnemy.move2(3);
+		    	}
+		    	else {
+		    		if(dy>0) localEnemy.move2(1);
+		    		else localEnemy.move2(2);
+		    	}
+		    	setBodyVelocity(localEnemy.getObjDirectionInt(), enemyBody, localEnemy.getSpeed());
+		    }
+		});
+		return test;
+	}
+	
 	private void createUnwalkableObjects(TMXTiledMap map){
 		// Loop through the object groups
 		 for(final TMXObjectGroup group: this.mTMXTiledMap.getTMXObjectGroups()) {
@@ -444,10 +484,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 					PhysicsFactory.createBoxBody(this.mPhysicsWorld, rect, BodyType.StaticBody, boxFixtureDef).setUserData("shape");;
 					rect.setVisible(false);
 					mScene.attachChild(rect);
-				 }
-			 }
-		 }
-	}
+				 } //end for
+			 } // end if
+		 }// end for
+	} // end createUnwalk..
 	
 	private void addBounds(float width, float height){
 		final Shape bottom = new Rectangle(0, height - 2, width, 2, this.getVertexBufferObjectManager());

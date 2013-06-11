@@ -33,7 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
  
 
-public class LoginActivity extends Activity {
+public class LocalLoginActivity extends Activity {
     Button btnLogin;
     Button btnLinkToRegister;
     EditText inputEmail;
