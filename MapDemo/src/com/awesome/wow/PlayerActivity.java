@@ -241,21 +241,23 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		mTextureEnemy = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.DEFAULT);
 		mEnemyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mTextureEnemy, this, "enemy.png", 0, 0, 3, 4);
 		
+		// 2nd Enemy sprite texture
 		mTextureFace = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.DEFAULT);
 		mFaceTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mTextureFace, this, "enemy.png", 0, 0, 3, 4);
 		
+		// 3rd Enemy sprite texture
 		mTextureFace2 = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.DEFAULT);
 		mFace2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mTextureFace2, this, "enemy.png", 0, 0, 3, 4);
 		
 		// Load the textures
-		//this.mEngine.getTextureManager().loadTexture(this.mTexturePlayer);
-		//this.mEngine.getTextureManager().loadTexture(this.mOnScreenControlTexture);
 		mOnScreenControlTexture.load();
 		mOnScreenRunTexture.load();
 		mTexturePlayer.load();
 		mTextureEnemy.load();
 		mTextureFace.load();
 		mTextureFace2.load();
+		//this.mEngine.getTextureManager().loadTexture(this.mTexturePlayer);
+		//this.mEngine.getTextureManager().loadTexture(this.mOnScreenControlTexture);
 	}
 	
 	@Override
@@ -270,7 +272,6 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		mScene = new Scene();
 		mScene.registerUpdateHandler(this.mPhysicsWorld);
 		mScene.setBackground(new Background(1, 1, 1));
-		
 		
 		// Load the TMX map
 		try {
@@ -294,6 +295,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		final TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);
 		this.mBoundChaseCamera.setBounds(0, 0, tmxLayer.getWidth(), tmxLayer.getHeight());
 		this.mBoundChaseCamera.setBoundsEnabled(true);
+		
 		// Add outer walls
 		this.addBounds(tmxLayer.getWidth(), tmxLayer.getHeight());
 
@@ -314,7 +316,6 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 				mBoundChaseCamera.updateChaseEntity();
 			}
 		});
-		mScene.attachChild(player);
 		
 		// Create the enemy sprite and add it to the scene
 		enemy = new Enemy(new int[]{2,1,1,2}, 26*TILE_DIM, 25*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
@@ -343,6 +344,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
+		// This will be where the 3rd enemy goes
 		/*String str = "monster";
 		Enemy enemy3 = new Enemy(new int[]{2,1,1,2}, 28*TILE_DIM, 27*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
 		//final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
@@ -356,6 +358,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		*/
+		
+		// Movement timer1
 		mEnemyTimer = new Timer(2, new Timer.ITimerCallback() {
 		    @Override
 			public void onTick() {
@@ -374,6 +378,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    }
 		});		
 		
+		// Movement timer2
 		mEnemyTimer2 = new Timer(3, new Timer.ITimerCallback() {
 		    @Override
 			public void onTick() {
@@ -392,17 +397,16 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    }
 		});
 		
-		// Attention: Adding the enemies
-		
+		// Update handlers
 		enemy.registerUpdateHandler(mEnemyTimer);
-		mScene.attachChild(enemy);
-		
-		// Why is the enemy #2 called face?
-		face.registerUpdateHandler(makeTimer(face, mFaceBody));
-		mScene.attachChild(face);
 		
 		// Paul and Jonathon meeting replaced "mEnemyTimer2" with makeTimer()
-		//face.registerUpdateHandler(mEnemyTimer2);
+		face.registerUpdateHandler(makeTimer(face, mFaceBody));
+		
+		// Attach characters to scene
+		mScene.attachChild(player);
+		mScene.attachChild(enemy);
+		mScene.attachChild(face);
 		
 		// uncomment this and enemy3-creation section above for 1 moving and 2 stuck enemies
 		//enemy3.registerUpdateHandler(mEnemyTimer2);
@@ -436,8 +440,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 				
 				// Set the player's velocity
 				mPlayerBody.setLinearVelocity(pValueX * player.getSpd(), pValueY * player.getSpd());
-			}
-		});
+				
+			} // end onControlChange	
+		}); // end new DigitalOnScreenControl
+		
 		this.mDigitalOnScreenControl.getControlBase().setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		this.mDigitalOnScreenControl.getControlBase().setAlpha(0.5f);
 		this.mDigitalOnScreenControl.getControlBase().setScaleCenter(0, 128);
@@ -464,9 +470,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		mDigitalOnScreenControl.registerTouchArea(this.mRunButton);
 		
 		return mScene;
-	}
+	} // end onCreateScene()
 	
 	// New timer added in Paul and Jonathon meeting
+	// For it to work as a function, goes outside onCreateScene()?
 	Timer makeTimer(final Enemy localEnemy, final Body enemyBody){
 		Timer test = new Timer(2, new Timer.ITimerCallback() {
 		    @Override
@@ -499,10 +506,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 					PhysicsFactory.createBoxBody(this.mPhysicsWorld, rect, BodyType.StaticBody, boxFixtureDef).setUserData("shape");;
 					rect.setVisible(false);
 					mScene.attachChild(rect);
-				 } //end for
-			 } // end if
-		 }// end for
-	} // end createUnwalk..
+				 }
+			 }
+		 } // end for
+	} // end createUnwalkableObjects()
 	
 	private void addBounds(float width, float height){
 		final Shape bottom = new Rectangle(0, height - 2, width, 2, this.getVertexBufferObjectManager());
