@@ -67,17 +67,17 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	private TMXTiledMap mTMXTiledMap;
 	private BoundCamera mBoundChaseCamera;
     private Scene mScene;
-	private BitmapTextureAtlas mTexturePlayer, mTextureEnemy, mTextureFace;
-	private Body mPlayerBody, mEnemyBody, mFaceBody;
-	private TiledTextureRegion mPlayerTextureRegion, mEnemyTextureRegion, mFaceTextureRegion;
-	private Enemy enemy, face;
+	private BitmapTextureAtlas mTexturePlayer, mTextureEnemy, mTextureFace, mTextureFace2;
+	private Body mPlayerBody, mEnemyBody, mFaceBody, mFace2Body;
+	private TiledTextureRegion mPlayerTextureRegion, mEnemyTextureRegion, mFaceTextureRegion, mFace2TextureRegion;
+	private Enemy enemy, face, face2;
 	private Player player;
 	private BitmapTextureAtlas mOnScreenControlTexture, mOnScreenRunTexture;
 	private TextureRegion mOnScreenControlBaseTextureRegion, mOnScreenControlKnobTextureRegion, mOnScreenRunTextureRegion;
 	private DigitalOnScreenControl mDigitalOnScreenControl;
 	private ButtonSprite mRunButton;
 	private PhysicsWorld mPhysicsWorld;
-	private Timer mEnemyTimer, mEnemyTimer2;
+	private Timer mEnemyTimer, mEnemyTimer2, mEnemyTimer3;
 	private boolean spdIncreasing = true;
 
 	//private SurfaceScrollDetector mScrollDetector;
@@ -140,6 +140,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            }
 	        }
 
+	        // Calculates victory in the fight (current game)
 	        @Override
 	        public void endContact(Contact contact)
 	        {
@@ -204,7 +205,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 	    };
 	    return contactListener;
-	}
+	} //end createContactListener()
 	
 	// ===========================================================
 	// Getter & Setter
@@ -243,6 +244,9 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		mTextureFace = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.DEFAULT);
 		mFaceTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mTextureFace, this, "enemy.png", 0, 0, 3, 4);
 		
+		mTextureFace2 = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.DEFAULT);
+		mFace2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mTextureFace2, this, "enemy.png", 0, 0, 3, 4);
+		
 		// Load the textures
 		//this.mEngine.getTextureManager().loadTexture(this.mTexturePlayer);
 		//this.mEngine.getTextureManager().loadTexture(this.mOnScreenControlTexture);
@@ -251,6 +255,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		mTexturePlayer.load();
 		mTextureEnemy.load();
 		mTextureFace.load();
+		mTextureFace2.load();
 	}
 	
 	@Override
@@ -291,13 +296,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		this.mBoundChaseCamera.setBoundsEnabled(true);
 		// Add outer walls
 		this.addBounds(tmxLayer.getWidth(), tmxLayer.getHeight());
-		
 
-		// Calculate the coordinates for the player, so it's centred on the camera.
+		// Calculate the coordinates for the player, so it's centered on the camera.
 		//final float centerX = (CAMERA_WIDTH - this.mPlayerTextureRegion.getWidth()) / 2;
 		//final float centerY = (CAMERA_HEIGHT - this.mPlayerTextureRegion.getHeight()) / 2;
-		
-		
 		
 		// Create the player sprite and add it to the scene.
 		player = new Player(new int[]{10,2,1,3,2}, 23*TILE_DIM, 31*TILE_DIM, this.mPlayerTextureRegion, this.getVertexBufferObjectManager());
@@ -327,9 +329,22 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
-		String str = "monster";
+		// Create the second enemy sprite and add it to the scene
+		// Why is face a private entity in the class?
+		face = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFaceTextureRegion, this.getVertexBufferObjectManager());
+		final FixtureDef faceFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
+		mFaceBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, face, BodyType.KinematicBody, faceFixtureDef);
+		mFaceBody.setLinearVelocity(0, 0);
+		mFaceBody.setUserData("monster2");
+		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face, mFaceBody, true, false){
+			@Override
+			public void onUpdate(float pSecondsElapsed){
+				super.onUpdate(pSecondsElapsed);
+			}
+		});
 		
-		/*Enemy enemy3 = new Enemy(new int[]{2,1,1,2}, 28*TILE_DIM, 27*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
+		/*String str = "monster";
+		Enemy enemy3 = new Enemy(new int[]{2,1,1,2}, 28*TILE_DIM, 27*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
 		//final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
 		mEnemyBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, enemy, BodyType.KinematicBody, enemyFixtureDef);
 		mEnemyBody.setLinearVelocity(0, 0);
@@ -359,25 +374,6 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    }
 		});		
 		
-		
-		enemy.registerUpdateHandler(mEnemyTimer);
-		//enemy3.registerUpdateHandler(mEnemyTimer);
-		mScene.attachChild(enemy);
-		//mScene.attachChild(enemy3);
-		
-		// Create the second enemy sprite and add it to the scene
-		face = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFaceTextureRegion, this.getVertexBufferObjectManager());
-		final FixtureDef faceFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
-		mFaceBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, face, BodyType.KinematicBody, faceFixtureDef);
-		mFaceBody.setLinearVelocity(0, 0);
-		mFaceBody.setUserData("monster2");
-		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face, mFaceBody, true, false){
-			@Override
-			public void onUpdate(float pSecondsElapsed){
-				super.onUpdate(pSecondsElapsed);
-			}
-		});
-		
 		mEnemyTimer2 = new Timer(3, new Timer.ITimerCallback() {
 		    @Override
 			public void onTick() {
@@ -394,10 +390,27 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    	}
 		    	setBodyVelocity(face.getObjDirectionInt(), mFaceBody, face.getSpeed());
 		    }
-		});		
-		//face.registerUpdateHandler(mEnemyTimer2);
+		});
+		
+		// Attention: Adding the enemies
+		
+		enemy.registerUpdateHandler(mEnemyTimer);
+		mScene.attachChild(enemy);
+		
+		// Why is the enemy #2 called face?
 		face.registerUpdateHandler(makeTimer(face, mFaceBody));
 		mScene.attachChild(face);
+		
+		// Paul and Jonathon meeting replaced "mEnemyTimer2" with makeTimer()
+		//face.registerUpdateHandler(mEnemyTimer2);
+		
+		// uncomment this and enemy3-creation section above for 1 moving and 2 stuck enemies
+		//enemy3.registerUpdateHandler(mEnemyTimer2);
+		//mScene.attachChild(enemy3);
+		
+
+		
+		
 		
 		// Add the control
 		this.mDigitalOnScreenControl = new DigitalOnScreenControl(0, CAMERA_HEIGHT - this.mOnScreenControlBaseTextureRegion.getHeight(), this.mBoundChaseCamera, this.mOnScreenControlBaseTextureRegion, this.mOnScreenControlKnobTextureRegion, 0.1f, this.getVertexBufferObjectManager(), new IOnScreenControlListener() {
@@ -434,6 +447,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		this.mDigitalOnScreenControl.refreshControlKnobPosition();
 		mScene.setChildScene(this.mDigitalOnScreenControl);
 		
+		// Green button that changes player speed
 		this.mRunButton = new ButtonSprite(CAMERA_WIDTH - this.mOnScreenRunTextureRegion.getWidth(), CAMERA_HEIGHT - this.mOnScreenRunTextureRegion.getHeight(), this.mOnScreenRunTextureRegion, this.getVertexBufferObjectManager(), new OnClickListener() {
 
 			@Override
@@ -452,6 +466,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		return mScene;
 	}
 	
+	// New timer added in Paul and Jonathon meeting
 	Timer makeTimer(final Enemy localEnemy, final Body enemyBody){
 		Timer test = new Timer(2, new Timer.ITimerCallback() {
 		    @Override
