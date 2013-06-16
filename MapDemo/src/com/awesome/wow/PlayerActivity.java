@@ -70,7 +70,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	private BitmapTextureAtlas mTexturePlayer, mTextureEnemy, mTextureFace, mTextureFace2;
 	private Body mPlayerBody, mEnemyBody, mFaceBody, mFace2Body;
 	private TiledTextureRegion mPlayerTextureRegion, mEnemyTextureRegion, mFaceTextureRegion, mFace2TextureRegion;
-	private Enemy enemy, face, face2;
+	private Enemy enemy, face;
 	private Player player;
 	private BitmapTextureAtlas mOnScreenControlTexture, mOnScreenRunTexture;
 	private TextureRegion mOnScreenControlBaseTextureRegion, mOnScreenControlKnobTextureRegion, mOnScreenRunTextureRegion;
@@ -98,6 +98,9 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	        {
 	            final Fixture x1 = contact.getFixtureA();
 	            final Fixture x2 = contact.getFixtureB();
+	            
+	            // How many monsters do we want? Do we need to do this for each one?
+	            // The idea of setting generic user data "monster" looks intuitive!
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(enemy, player)){
@@ -344,12 +347,13 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
-		// This will be where the 3rd enemy goes
-		face2 = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFace2TextureRegion, this.getVertexBufferObjectManager());
+		// Create the third enemy sprite and add it to the scene (COLLISIONS ONLY)
+		String str = "monster3";
+		final Enemy face2 = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFace2TextureRegion, this.getVertexBufferObjectManager());
 		final FixtureDef face2FixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
 		mFace2Body = PhysicsFactory.createBoxBody(this.mPhysicsWorld, face2, BodyType.KinematicBody, face2FixtureDef);
 		mFace2Body.setLinearVelocity(0, 0);
-		mFace2Body.setUserData("monster3");
+		mFace2Body.setUserData(str);
 		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face2, mFace2Body, true, false){
 			@Override
 			public void onUpdate(float pSecondsElapsed){
@@ -357,63 +361,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
-		// this is another way we were looking into making enemy3 
-		/*String str = "monster";
-		Enemy enemy3 = new Enemy(new int[]{2,1,1,2}, 28*TILE_DIM, 27*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
-		//final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
-		mEnemyBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, enemy, BodyType.KinematicBody, enemyFixtureDef);
-		mEnemyBody.setLinearVelocity(0, 0);
-		mEnemyBody.setUserData(str);
-		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(enemy, mEnemyBody, true, false){
-			@Override
-			public void onUpdate(float pSecondsElapsed){
-				super.onUpdate(pSecondsElapsed);
-			}
-		});
-		*/
-		
-		// Movement timer1
-		mEnemyTimer = new Timer(2, new Timer.ITimerCallback() {
-		    @Override
-			public void onTick() {
-		        // move enemy towards player
-		    	double dx = player.getX() - enemy.getX();
-		    	double dy = player.getY() - enemy.getY();
-		    	if(Math.abs(dx)>Math.abs(dy)) {
-		    		if(dx>0) enemy.move2(4);
-		    		else enemy.move2(3);
-		    	}
-		    	else {
-		    		if(dy>0) enemy.move2(1);
-		    		else enemy.move2(2);
-		    	}
-		    	setBodyVelocity(enemy.getObjDirectionInt(), mEnemyBody, enemy.getSpeed());
-		    }
-		});		
-		
-		// Movement timer2
-		mEnemyTimer2 = new Timer(3, new Timer.ITimerCallback() {
-		    @Override
-			public void onTick() {
-		        // move enemy towards player
-		    	double dx = player.getX() - face2.getX();
-		    	double dy = player.getY() - face2.getY();
-		    	if(Math.abs(dx)>Math.abs(dy)) {
-		    		if(dx>0) face2.move2(4);
-		    		else face2.move2(3);
-		    	}
-		    	else {
-		    		if(dy>0) face2.move2(1);
-		    		else face2.move2(2);
-		    	}
-		    	setBodyVelocity(face2.getObjDirectionInt(), mFace2Body, face2.getSpeed());
-		    }
-		});
-		
 		// Update handlers
-		enemy.registerUpdateHandler(mEnemyTimer);
-		face.registerUpdateHandler(makeTimer(face, mFaceBody)); // Paul and Jonathon meeting replaced "mEnemyTimer2" with makeTimer()
-		face2.registerUpdateHandler(mEnemyTimer2);
+		enemy.registerUpdateHandler(makeTimer(enemy, mEnemyBody, 2));
+		face.registerUpdateHandler(makeTimer(face, mFaceBody, 2));
+		face2.registerUpdateHandler(makeTimer(face2, mFace2Body, 3));
 		
 		// Attach characters to scene
 		mScene.attachChild(player);
@@ -477,10 +428,9 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		return mScene;
 	} // end onCreateScene()
 	
-	// New timer added in Paul and Jonathon meeting
-	// For it to work as a function, goes outside onCreateScene()?
-	Timer makeTimer(final Enemy localEnemy, final Body enemyBody){
-		Timer test = new Timer(2, new Timer.ITimerCallback() {
+	// Function that creates movement timers
+	Timer makeTimer(final Enemy localEnemy, final Body enemyBody, int magicConstant){
+		Timer test = new Timer(magicConstant, new Timer.ITimerCallback() {
 		    @Override
 			public void onTick() {
 		        // move enemy towards player
@@ -611,4 +561,4 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 
     }
 	
-}
+} // end class PlayerActivity
