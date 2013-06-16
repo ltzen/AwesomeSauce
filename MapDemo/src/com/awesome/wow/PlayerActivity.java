@@ -345,6 +345,19 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		});
 		
 		// This will be where the 3rd enemy goes
+		face2 = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFace2TextureRegion, this.getVertexBufferObjectManager());
+		final FixtureDef face2FixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
+		mFace2Body = PhysicsFactory.createBoxBody(this.mPhysicsWorld, face2, BodyType.KinematicBody, face2FixtureDef);
+		mFace2Body.setLinearVelocity(0, 0);
+		mFace2Body.setUserData("monster3");
+		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face2, mFace2Body, true, false){
+			@Override
+			public void onUpdate(float pSecondsElapsed){
+				super.onUpdate(pSecondsElapsed);
+			}
+		});
+		
+		// this is another way we were looking into making enemy3
 		/*String str = "monster";
 		Enemy enemy3 = new Enemy(new int[]{2,1,1,2}, 28*TILE_DIM, 27*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
 		//final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
@@ -411,10 +424,6 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		// uncomment this and enemy3-creation section above for 1 moving and 2 stuck enemies
 		//enemy3.registerUpdateHandler(mEnemyTimer2);
 		//mScene.attachChild(enemy3);
-		
-
-		
-		
 		
 		// Add the control
 		this.mDigitalOnScreenControl = new DigitalOnScreenControl(0, CAMERA_HEIGHT - this.mOnScreenControlBaseTextureRegion.getHeight(), this.mBoundChaseCamera, this.mOnScreenControlBaseTextureRegion, this.mOnScreenControlKnobTextureRegion, 0.1f, this.getVertexBufferObjectManager(), new IOnScreenControlListener() {
