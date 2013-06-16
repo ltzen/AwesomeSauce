@@ -357,7 +357,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
-		// this is another way we were looking into making enemy3
+		// this is another way we were looking into making enemy3 
 		/*String str = "monster";
 		Enemy enemy3 = new Enemy(new int[]{2,1,1,2}, 28*TILE_DIM, 27*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
 		//final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
@@ -396,34 +396,30 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    @Override
 			public void onTick() {
 		        // move enemy towards player
-		    	double dx = player.getX() - face.getX();
-		    	double dy = player.getY() - face.getY();
+		    	double dx = player.getX() - face2.getX();
+		    	double dy = player.getY() - face2.getY();
 		    	if(Math.abs(dx)>Math.abs(dy)) {
-		    		if(dx>0) face.move2(4);
-		    		else face.move2(3);
+		    		if(dx>0) face2.move2(4);
+		    		else face2.move2(3);
 		    	}
 		    	else {
-		    		if(dy>0) face.move2(1);
-		    		else face.move2(2);
+		    		if(dy>0) face2.move2(1);
+		    		else face2.move2(2);
 		    	}
-		    	setBodyVelocity(face.getObjDirectionInt(), mFaceBody, face.getSpeed());
+		    	setBodyVelocity(face2.getObjDirectionInt(), mFace2Body, face2.getSpeed());
 		    }
 		});
 		
 		// Update handlers
 		enemy.registerUpdateHandler(mEnemyTimer);
-		
-		// Paul and Jonathon meeting replaced "mEnemyTimer2" with makeTimer()
-		face.registerUpdateHandler(makeTimer(face, mFaceBody));
+		face.registerUpdateHandler(makeTimer(face, mFaceBody)); // Paul and Jonathon meeting replaced "mEnemyTimer2" with makeTimer()
+		face2.registerUpdateHandler(mEnemyTimer2);
 		
 		// Attach characters to scene
 		mScene.attachChild(player);
 		mScene.attachChild(enemy);
 		mScene.attachChild(face);
-		
-		// uncomment this and enemy3-creation section above for 1 moving and 2 stuck enemies
-		//enemy3.registerUpdateHandler(mEnemyTimer2);
-		//mScene.attachChild(enemy3);
+		mScene.attachChild(face2);
 		
 		// Add the control
 		this.mDigitalOnScreenControl = new DigitalOnScreenControl(0, CAMERA_HEIGHT - this.mOnScreenControlBaseTextureRegion.getHeight(), this.mBoundChaseCamera, this.mOnScreenControlBaseTextureRegion, this.mOnScreenControlKnobTextureRegion, 0.1f, this.getVertexBufferObjectManager(), new IOnScreenControlListener() {
