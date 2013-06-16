@@ -428,6 +428,24 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		return mScene;
 	} // end onCreateScene()
 	
+	// Function that creates enemies?
+	/*
+	Enemy makeEnemy(Body enemyBody, String userData){
+		Enemy enemy1 = new Enemy(new int[]{2,1,1,2}, 26*TILE_DIM, 25*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
+		final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
+		enemyBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, enemy1, BodyType.KinematicBody, enemyFixtureDef);
+		enemyBody.setLinearVelocity(0, 0);
+		enemyBody.setUserData(userData);
+		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(enemy1, enemyBody, true, false){
+			@Override
+			public void onUpdate(float pSecondsElapsed){
+				super.onUpdate(pSecondsElapsed);
+			}
+		});
+		return enemy1;
+	}
+	*/
+	
 	// Function that creates movement timers
 	Timer makeTimer(final Enemy localEnemy, final Body enemyBody, int magicConstant){
 		Timer test = new Timer(magicConstant, new Timer.ITimerCallback() {
