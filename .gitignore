@@ -31,3 +31,5 @@ proguard/
 *.ipr
 *.iws
 .idea/
+MapDemo/.settings/org.eclipse.jdt.core.prefs
+MapDemo/project.properties
