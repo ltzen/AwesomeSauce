@@ -80,7 +80,6 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	private DigitalOnScreenControl mDigitalOnScreenControl;
 	private ButtonSprite mRunButton;
 	private PhysicsWorld mPhysicsWorld;
-	//private Timer mEnemyTimer, mEnemyTimer2, mEnemyTimer3;  now created via makeTimer() call
 	private boolean spdIncreasing = true;
 
 	//private SurfaceScrollDetector mScrollDetector;
@@ -275,7 +274,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		
 		// 3rd Enemy sprite texture
 		mTextureFace2 = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.DEFAULT);
-		mFace2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mTextureFace2, this, "enemy.png", 0, 0, 3, 4);
+		mFace2TextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mTextureFace2, this, "hero.png", 0, 0, 3, 4);
 		
 		// Load the textures
 		mOnScreenControlTexture.load();
@@ -284,6 +283,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		mTextureEnemy.load();
 		mTextureFace.load();
 		mTextureFace2.load();
+		// dunno why these are still here
 		//this.mEngine.getTextureManager().loadTexture(this.mTexturePlayer);
 		//this.mEngine.getTextureManager().loadTexture(this.mOnScreenControlTexture);
 		
@@ -328,6 +328,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		// Add outer walls
 		this.addBounds(tmxLayer.getWidth(), tmxLayer.getHeight());
 
+		// dunno why this is still here
 		// Calculate the coordinates for the player, so it's centered on the camera.
 		//final float centerX = (CAMERA_WIDTH - this.mPlayerTextureRegion.getWidth()) / 2;
 		//final float centerY = (CAMERA_HEIGHT - this.mPlayerTextureRegion.getHeight()) / 2;
@@ -359,11 +360,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});	
 		
-		
+		// Jonathon was tryin' to make a function like this...
 		//enemy = makeEnemy(mEnemyBody, "monster");
 		
 		// Create the second enemy sprite and add it to the scene
-		// Why is face a private entity in the class?
 		face = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFaceTextureRegion, this.getVertexBufferObjectManager());
 		final FixtureDef faceFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
 		mFaceBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, face, BodyType.KinematicBody, faceFixtureDef);
@@ -376,9 +376,9 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
-		// Create the third enemy sprite and add it to the scene (COLLISIONS ONLY)
+		// Create the third enemy sprite and add it to the scene
 		String str = "monster";
-		// final Enemy ... was on next line but face2 has to be global??
+		// final Enemy ... was start of next line but face2 has to be global??
 		face2 = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFace2TextureRegion, this.getVertexBufferObjectManager());
 		final FixtureDef face2FixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
 		mFace2Body = PhysicsFactory.createBoxBody(this.mPhysicsWorld, face2, BodyType.KinematicBody, face2FixtureDef);
