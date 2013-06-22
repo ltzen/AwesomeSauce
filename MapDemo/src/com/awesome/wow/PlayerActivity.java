@@ -69,15 +69,18 @@ public class PlayerActivity extends SimpleBaseGameActivity{
     private Scene mScene;
 	private BitmapTextureAtlas mTexturePlayer, mTextureEnemy, mTextureFace, mTextureFace2;
 	private Body mPlayerBody, mEnemyBody, mFaceBody, mFace2Body;
-	private TiledTextureRegion mPlayerTextureRegion, mEnemyTextureRegion, mFaceTextureRegion, mFace2TextureRegion;
-	private Enemy enemy, face;
+	private TiledTextureRegion mPlayerTextureRegion;
+	private TiledTextureRegion mEnemyTextureRegion;
+	private TiledTextureRegion mFaceTextureRegion;
+	private TiledTextureRegion mFace2TextureRegion;
+	private Enemy enemy, face, face2;
 	private Player player;
 	private BitmapTextureAtlas mOnScreenControlTexture, mOnScreenRunTexture;
 	private TextureRegion mOnScreenControlBaseTextureRegion, mOnScreenControlKnobTextureRegion, mOnScreenRunTextureRegion;
 	private DigitalOnScreenControl mDigitalOnScreenControl;
 	private ButtonSprite mRunButton;
 	private PhysicsWorld mPhysicsWorld;
-	private Timer mEnemyTimer, mEnemyTimer2, mEnemyTimer3;
+	//private Timer mEnemyTimer, mEnemyTimer2, mEnemyTimer3;  now created via makeTimer() call
 	private boolean spdIncreasing = true;
 
 	//private SurfaceScrollDetector mScrollDetector;
@@ -104,8 +107,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(enemy, player)){
-	                	player.changeHP(-enemy.getStrength());
-	                } else enemy.changeHP(-player.getStren());
+	                	player.changeHP(0*enemy.getStrength());
+	                } else enemy.changeHP(-5*(player.getStren()));
 	                Log.i("MONSTER HP", Integer.toString(enemy.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
@@ -113,9 +116,18 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster2")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(face, player)){
-	                	player.changeHP(-face.getStrength());
-	                } else face.changeHP(-player.getStren());
+	                	player.changeHP(0*face.getStrength());
+	                } else face.changeHP(-5*(player.getStren()));
 	                Log.i("MONSTER HP", Integer.toString(face.getHP()));
+	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
+	                mEnemyBody.setLinearVelocity(0,0);
+	            }
+	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
+	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
+	                if(enemyFacingPlayer(face2, player)){
+	                	player.changeHP(0*face2.getStrength());
+	                } else face2.changeHP(-5*(player.getStren()));
+	                Log.i("MONSTER HP", Integer.toString(face2.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
 	            } 
@@ -159,12 +171,25 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	                if(player.isDead()) {
 	                	destroyPlayer(player);
 	                }
-	            }if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster2"))
+	            }
+	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster"))
 	            {
 	                Log.i("END_CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                mPlayerBody.setLinearVelocity(0,0);
 	                if(face.isDead()) {
-	                	destroyEnemy(face, mFaceBody);
+	                	destroyEnemy(face, mEnemyBody);
+	                }
+	                if(player.isDead()) {
+	                	destroyPlayer(player);
+	                }
+	            }
+	            // Jonathon added to test deletion of enemy3 (face2)
+	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster2"))
+	            {
+	                Log.i("END_CONTACT", "BETWEEN PLAYER AND MONSTER!");
+	                mPlayerBody.setLinearVelocity(0,0);
+	                if(face2.isDead()) {
+	                	destroyEnemy(face2, mFace2Body);
 	                }
 	                if(player.isDead()) {
 	                	destroyPlayer(player);
@@ -261,7 +286,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		mTextureFace2.load();
 		//this.mEngine.getTextureManager().loadTexture(this.mTexturePlayer);
 		//this.mEngine.getTextureManager().loadTexture(this.mOnScreenControlTexture);
-	}
+		
+	} // end onCreateResources()
 	
 	@Override
 	protected Scene onCreateScene() {
@@ -331,7 +357,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			public void onUpdate(float pSecondsElapsed){
 				super.onUpdate(pSecondsElapsed);
 			}
-		});
+		});	
+		
+		
+		//enemy = makeEnemy(mEnemyBody, "monster");
 		
 		// Create the second enemy sprite and add it to the scene
 		// Why is face a private entity in the class?
@@ -348,8 +377,9 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		});
 		
 		// Create the third enemy sprite and add it to the scene (COLLISIONS ONLY)
-		String str = "monster3";
-		final Enemy face2 = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFace2TextureRegion, this.getVertexBufferObjectManager());
+		String str = "monster";
+		// final Enemy ... was on next line but face2 has to be global??
+		face2 = new Enemy(new int[]{4,1,1,4}, 29*TILE_DIM, 28*TILE_DIM, this.mFace2TextureRegion, this.getVertexBufferObjectManager());
 		final FixtureDef face2FixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
 		mFace2Body = PhysicsFactory.createBoxBody(this.mPhysicsWorld, face2, BodyType.KinematicBody, face2FixtureDef);
 		mFace2Body.setLinearVelocity(0, 0);
@@ -428,15 +458,16 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		return mScene;
 	} // end onCreateScene()
 	
-	// Function that creates enemies?
 	/*
+	// Function for creating enemies?
+	 * maybe need a new class?
 	Enemy makeEnemy(Body enemyBody, String userData){
-		Enemy enemy1 = new Enemy(new int[]{2,1,1,2}, 26*TILE_DIM, 25*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
+		Enemy enemy1 = new Enemy(new int[]{2,1,1,2}, 26*TILE_DIM, 25*TILE_DIM, PlayerActivity.mEnemyTextureRegion, this.getVertexBufferObjectManager());
 		final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
-		enemyBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, enemy1, BodyType.KinematicBody, enemyFixtureDef);
+		enemyBody = PhysicsFactory.createBoxBody(PlayerActivity.mPhysicsWorld, enemy1, BodyType.KinematicBody, enemyFixtureDef);
 		enemyBody.setLinearVelocity(0, 0);
 		enemyBody.setUserData(userData);
-		this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(enemy1, enemyBody, true, false){
+		PlayerActivity.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(enemy1, enemyBody, true, false){
 			@Override
 			public void onUpdate(float pSecondsElapsed){
 				super.onUpdate(pSecondsElapsed);
