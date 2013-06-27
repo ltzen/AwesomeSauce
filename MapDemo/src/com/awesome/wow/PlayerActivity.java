@@ -83,6 +83,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	private ButtonSprite mRunButton;
 	private PhysicsWorld mPhysicsWorld;
 	private boolean spdIncreasing = true;
+	private int hp_enable = 0;
 
 	//private SurfaceScrollDetector mScrollDetector;
 	//private PinchZoomDetector mPinchZoomDetector;
@@ -108,7 +109,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(enemy, player)){
-	                	player.changeHP(hp_example_enable*enemy.getStrength());
+	                	player.changeHP(getHP()*enemy.getStrength());
 	                } else enemy.changeHP(-example_multiplier*(player.getStren()));
 	                Log.i("MONSTER HP", Integer.toString(enemy.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
@@ -499,6 +500,14 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		    }
 		});
 		return test;
+	}
+	
+	int getHP(){
+		return hp_enable;		
+	}
+	
+	void setHP(int value){
+		hp_enable = value;
 	}
 	
 	private void createUnwalkableObjects(TMXTiledMap map){

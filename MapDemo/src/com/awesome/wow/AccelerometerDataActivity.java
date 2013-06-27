@@ -33,7 +33,7 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-
+//import java.io.Serializable;
 /**
  * This is an example of using the accelerometer to integrate the device's
  * acceleration to a position using the Verlet method. This is illustrated with
@@ -48,6 +48,10 @@ import android.widget.TextView;
 
 public class AccelerometerDataActivity extends Activity implements SensorEventListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5715638316257322820L;
 	private SensorManager mSensorManager;
 	private PowerManager mPowerManager;
 	private WindowManager mWindowManager;
@@ -134,11 +138,15 @@ public class AccelerometerDataActivity extends Activity implements SensorEventLi
             @Override
 			public void onClick(View v) {
                 // Perform action on clicks  
-            	steps = 0;
-            	jacks = 0;
-            	crunches = 0;
+            	
+            	// We want to save the values now
+            	//steps = 0;
+            	//jacks = 0;
+            	//crunches = 0;
+            	Scores score = new Scores(12, "hi");
                 Intent intent = getPackageManager().getLaunchIntentForPackage("com.awesome.wow");
                 intent.setClass(AccelerometerDataActivity.this, MainMenuActivity.class);
+                intent.putExtra("testObject", score);
                 intent.setFlags(0);
                 intent.setPackage(null);
                 startActivity(intent);
@@ -288,7 +296,8 @@ public class AccelerometerDataActivity extends Activity implements SensorEventLi
                             if(average >= 100){
                             	jacks++;
                             	// making connection to game here for starters
-                            	//PlayerActivity.hp_example_enable = 1;
+                            	PlayerActivity player = new PlayerActivity();
+                            	player.setHP(5);
                             }
                             if(average<= 50){
                             	crunches++;
