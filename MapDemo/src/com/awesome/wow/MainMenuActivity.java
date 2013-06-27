@@ -109,16 +109,19 @@ public class MainMenuActivity extends Activity {
 
 	        });
 	        
-	        Button button4 = (Button) findViewById(R.id.exit);
+	        final Button button4 = (Button) findViewById(R.id.exit);
 	        button4.setOnClickListener(new OnClickListener() {
 	            @Override
 				public void onClick(View v) {
+	            	Intent i = getIntent();
+	            	Scores score = (Scores)i.getSerializableExtra("testObject");
+	            	button4.setText(score.getName());
 	                // Perform action on clicks 
-	            	if(MapService.active)
-	            	{
-	            		stopService(new Intent(MainMenuActivity.this,MapService.class));
-	            	}
-	                finish();
+	            	//if(MapService.active)
+	            	//{
+	            	//	stopService(new Intent(MainMenuActivity.this,MapService.class));
+	            	//}
+	               // finish();
 	                
 	            }
 	            
