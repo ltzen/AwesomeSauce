@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	
+    <integer name="jonathonsTestInteger">100</integer>
     <string name="app_name">World of Workout</string>
     <string name="action_settings">Menu</string>
     <string name="hello_world">Hello world!</string>

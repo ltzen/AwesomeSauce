@@ -16,6 +16,7 @@
 
 package com.awesome.wow;
 
+//import PlayerActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -286,6 +287,8 @@ public class AccelerometerDataActivity extends Activity implements SensorEventLi
                             Log.w("average", Float.toString(average));
                             if(average >= 100){
                             	jacks++;
+                            	// making connection to game here for starters
+                            	//PlayerActivity.hp_example_enable = 1;
                             }
                             if(average<= 50){
                             	crunches++;

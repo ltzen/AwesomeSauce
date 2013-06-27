@@ -58,6 +58,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	private static final int CAMERA_WIDTH = 480;
     private static final int CAMERA_HEIGHT = 320;
 	private static final float TILE_DIM = 32;
+	public int example_multiplier = 5;
+	public static int hp_example_enable = 0;
     //private static final long[] ANIMATE_DURATION = new long[]{200, 200, 200};
 	
 	// ===========================================================
@@ -106,8 +108,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(enemy, player)){
-	                	player.changeHP(0*enemy.getStrength());
-	                } else enemy.changeHP(-5*(player.getStren()));
+	                	player.changeHP(hp_example_enable*enemy.getStrength());
+	                } else enemy.changeHP(-example_multiplier*(player.getStren()));
 	                Log.i("MONSTER HP", Integer.toString(enemy.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
@@ -116,7 +118,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(face, player)){
 	                	player.changeHP(0*face.getStrength());
-	                } else face.changeHP(-5*(player.getStren()));
+	                } else face.changeHP(-example_multiplier*(player.getStren()));
 	                Log.i("MONSTER HP", Integer.toString(face.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
@@ -125,7 +127,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(face2, player)){
 	                	player.changeHP(0*face2.getStrength());
-	                } else face2.changeHP(-5*(player.getStren()));
+	                } else face2.changeHP(-example_multiplier*(player.getStren()));
 	                Log.i("MONSTER HP", Integer.toString(face2.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
