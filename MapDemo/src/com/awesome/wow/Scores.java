@@ -6,27 +6,18 @@ import java.io.Serializable;
 
 public class Scores implements Serializable {
 	
-	private int id;
-	private String name;
+	public int HP;
+	public int strength;
+	public int speed;
+	public int stamina;
+	public int fatigue;
+
+	public Scores(){
+		HP = 0;
+		strength = 0;
+		speed = 0;
+		stamina = 0;
+		fatigue = 0;
+	}
 	
-	// Constructor
-	public Scores(int id, String name){
-	    this.id = id;
-	    this.name = name;
-	}
-
-	// Getters & Setters
-	public int getId() {
-	    return id;
-	}
-	public void setId(int id) {
-	    this.id = id;
-	}
-	public String getName() {
-	    return this.name;
-	}
-	public void setName(String name) {
-	    this.name = name;
-	}
-
 }

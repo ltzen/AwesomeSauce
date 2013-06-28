@@ -121,8 +121,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(enemy, player)){
-	                	player.changeHP(hp_enable*enemy.getStrength());
-	                } else enemy.changeHP(-example_multiplier*(player.getStren()));
+	                	player.changeHP(-enemy.getStrength());
+	                } else enemy.changeHP(-player.getStren());
 	                Log.i("MONSTER HP", Integer.toString(enemy.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
@@ -130,8 +130,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster2")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(face, player)){
-	                	player.changeHP(0*face.getStrength());
-	                } else face.changeHP(-example_multiplier*(player.getStren()));
+	                	player.changeHP(-face.getStrength());
+	                } else face.changeHP(-player.getStren());
 	                Log.i("MONSTER HP", Integer.toString(face.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
@@ -139,8 +139,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(face2, player)){
-	                	player.changeHP(0*face2.getStrength());
-	                } else face2.changeHP(-example_multiplier*(player.getStren()));
+	                	player.changeHP(-face2.getStrength());
+	                } else face2.changeHP(-player.getStren());
 	                Log.i("MONSTER HP", Integer.toString(face2.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
 	                mEnemyBody.setLinearVelocity(0,0);
@@ -265,10 +265,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	
 	@Override
 	protected void onCreateResources() {
-		// Bring in count from MainMenuActivity
-		Intent currentIntent = getIntent();
-		Scores receivedScore = (Scores)currentIntent.getSerializableExtra("toGame");
-		hp_enable = receivedScore.getId();
+		
+		countExercise();
 		
 		// Wanna make some text
         this.mFontTexture = new BitmapTextureAtlas(this.mEngine.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -365,6 +363,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		//final float centerY = (CAMERA_HEIGHT - this.mPlayerTextureRegion.getHeight()) / 2;
 		
 		// Create the player sprite and add it to the scene.
+		//hp, strength, speed, stamina, fatigue
 		player = new Player(new int[]{10,2,1,3,2}, 23*TILE_DIM, 31*TILE_DIM, this.mPlayerTextureRegion, this.getVertexBufferObjectManager());
 		this.mBoundChaseCamera.setChaseEntity(player);
 		final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
@@ -480,20 +479,21 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				if(spdIncreasing){
 					player.changeSpd(1);
-					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+					textCenter.setText(Integer.toString(hp_enable));
 				}
 				else{
 					player.changeSpd(-1);
-					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
 				}
 				
 				if(player.getSpd()==6){
 					spdIncreasing = false;
-					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
 				}
 				else if(player.getSpd()==2){
 					spdIncreasing = true;
-					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
 				}
 			}
 			
@@ -546,6 +546,16 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		return test;
 	}
 	
+	void countExercise(){
+		//called this in onCreateResources
+		
+		// Bring in count from MainMenuActivity
+		Intent currentIntent = getIntent();
+		Scores receivedScore = (Scores)currentIntent.getSerializableExtra("toGame");
+		hp_enable = receivedScore.HP;
+	}
+	
+	//can remove if public
 	int getHP(){
 		return hp_enable;		
 	}

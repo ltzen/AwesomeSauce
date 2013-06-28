@@ -143,7 +143,17 @@ public class AccelerometerDataActivity extends Activity implements SensorEventLi
             	//steps = 0;
             	//jacks = 0;
             	//crunches = 0;
-            	Scores score = new Scores(jacks, Integer.toString(crunches));
+            	MainMenuActivity.unlockScoreUpdate = true;
+            	Scores score = new Scores();
+            	
+            	// Calculate credits for exercise
+            	score.HP = 1;
+            	score.strength = 1;
+            	score.speed = 1;
+            	score.stamina = 1;
+            	score.fatigue = 1;
+            	
+            	
                 Intent intent = getPackageManager().getLaunchIntentForPackage("com.awesome.wow");
                 intent.setClass(AccelerometerDataActivity.this, MainMenuActivity.class);
                 intent.putExtra("testObject", score);

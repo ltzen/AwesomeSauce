@@ -50,12 +50,20 @@ public class Player extends GameObject {
 		return HP;
 	}
 	
+	public void setHP(int value) {
+		HP = value;
+	}
+	
 	public void changeHP(int amount) {
 		HP += amount;
 	}
 	
 	public int getStren() {
 		return strength;
+	}
+	
+	public void setStren(int value) {
+		strength = value;
 	}
 	
 	public void changeStren(int amount) {
@@ -66,6 +74,10 @@ public class Player extends GameObject {
 		return speed;
 	}
 	
+	public void setSpd(int value) {
+		speed = value;
+	}
+	
 	public void changeSpd(int amount) {
 		speed += amount;
 	}
@@ -74,12 +86,20 @@ public class Player extends GameObject {
 		return stamina;
 	}
 	
+	public void setStam(int value) {
+		stamina = value;
+	}
+	
 	public void changeStam(int amount) {
 		stamina += amount;
 	}
 	
 	public int getFatg() {
 		return fatigue;
+	}
+	
+	public void setFatg(int value) {
+		fatigue = value;
 	}
 	
 	public void changeFatg(int amount) {

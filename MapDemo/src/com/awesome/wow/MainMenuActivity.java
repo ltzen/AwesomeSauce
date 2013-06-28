@@ -9,7 +9,9 @@ import android.widget.Button;
 
 public class MainMenuActivity extends Activity {
 	
-	public int totalScore = 0;
+	public Scores totalScore;
+	public static Button button4;
+	public static boolean unlockScoreUpdate;
 	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,8 @@ public class MainMenuActivity extends Activity {
 	        button5.setOnClickListener(new OnClickListener() {
 	            @Override
 				public void onClick(View v) {
-	                // Perform action on clicks  
+	                // Perform action on clicks 
+	            	unlockScoreUpdate = true;
 	                Intent intent = getPackageManager().getLaunchIntentForPackage("com.awesome.wow");
 	                intent.setClass(MainMenuActivity.this, AccelerometerDataActivity.class);
 	                intent.setFlags(0);
@@ -101,7 +104,7 @@ public class MainMenuActivity extends Activity {
 	            @Override
 				public void onClick(View v) {
 	                // Perform action on clicks  
-	            	Scores score1 = new Scores(totalScore, "12345");
+	            	Scores score1 = new Scores();
 	                Intent intent = getPackageManager().getLaunchIntentForPackage("com.awesome.wow");
 	                intent.setClass(MainMenuActivity.this, PlayerActivity.class);
 	                intent.putExtra("toGame", score1);
@@ -113,14 +116,15 @@ public class MainMenuActivity extends Activity {
 
 	        });
 	        
-	        final Button button4 = (Button) findViewById(R.id.exit);
+	        button4 = (Button) findViewById(R.id.exit);
 	        button4.setOnClickListener(new OnClickListener() {
 	            @Override
 				public void onClick(View v) {
-	            	Intent i = getIntent();
-	            	Scores score = (Scores)i.getSerializableExtra("testObject");
-	            	button4.setText(score.getName());
-	            	totalScore = score.getId();
+	            	
+	            	if(unlockScoreUpdate){
+	            		updateScore();
+	            	}
+	            	
 	                // Perform action on clicks 
 	            	//if(MapService.active)
 	            	//{
@@ -133,11 +137,30 @@ public class MainMenuActivity extends Activity {
 	        });
 	        
 
-	 }
+	 } // end onCreate
+	 
+	 
+     public void updateScore(){
+     	
+     	try {
+     		Intent i = getIntent();
+     		Scores score = (Scores)i.getSerializableExtra("testObject");
+     		totalScore = score;
+     		//below line broke it
+     		//if(score.HP==score.HP){
+     			MainMenuActivity.button4.setText("value 0!");
+     		//}
+     		MainMenuActivity.button4.setText(Integer.toString(score.HP));
+     		
+     			
+     			//MainMenuActivity.button4.setText("try block ran");
+     	}
+     	finally {
+     		//MainMenuActivity.button4.setText("finally block ran");
+     	}
+     	
+     }
 	 
 	 
 	
-	 
-	 
-	
-}
+} // end MainMenuActivity
