@@ -18,6 +18,7 @@ import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
+import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -29,6 +30,8 @@ import org.andengine.extension.tmx.TMXObject;
 import org.andengine.extension.tmx.TMXObjectGroup;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -37,8 +40,10 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.HorizontalAlign;
 import org.andengine.util.debug.Debug;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
@@ -50,6 +55,10 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Manifold;
+// for text
+import android.graphics.Color;
+import android.graphics.Typeface;
+
 
 public class PlayerActivity extends SimpleBaseGameActivity{
 	// ===========================================================
@@ -83,7 +92,10 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	private ButtonSprite mRunButton;
 	private PhysicsWorld mPhysicsWorld;
 	private boolean spdIncreasing = true;
-	private int hp_enable = 0;
+	private Font mFont;
+	private BitmapTextureAtlas mFontTexture;
+	public int hp_enable = 0;
+	
 
 	//private SurfaceScrollDetector mScrollDetector;
 	//private PinchZoomDetector mPinchZoomDetector;
@@ -109,7 +121,7 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	            if (x1.getBody().getUserData().equals("player")&&x2.getBody().getUserData().equals("monster")) {
 	                Log.i("CONTACT", "BETWEEN PLAYER AND MONSTER!");
 	                if(enemyFacingPlayer(enemy, player)){
-	                	player.changeHP(getHP()*enemy.getStrength());
+	                	player.changeHP(hp_enable*enemy.getStrength());
 	                } else enemy.changeHP(-example_multiplier*(player.getStren()));
 	                Log.i("MONSTER HP", Integer.toString(enemy.getHP()));
 	                Log.i("PLAYER HP", Integer.toString(player.getHP()));
@@ -253,6 +265,22 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	
 	@Override
 	protected void onCreateResources() {
+		// Bring in count from MainMenuActivity
+		Intent currentIntent = getIntent();
+		Scores receivedScore = (Scores)currentIntent.getSerializableExtra("toGame");
+		hp_enable = receivedScore.getId();
+		
+		// Wanna make some text
+        this.mFontTexture = new BitmapTextureAtlas(this.mEngine.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+        this.mFont = new Font(null, this.mFontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.BLACK);
+
+        this.mEngine.getTextureManager().loadTexture(this.mFontTexture);
+        this.getFontManager().loadFont(this.mFont);
+
+		
+		
+		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		// Control texture
 		mOnScreenControlTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -394,6 +422,9 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
+		// Text
+        final Text textCenter = new Text(50f, 50f, this.mFont, "Speed: 1", this.mEngine.getVertexBufferObjectManager());
+		
 		// Update handlers
 		enemy.registerUpdateHandler(makeTimer(enemy, mEnemyBody, 2));
 		face.registerUpdateHandler(makeTimer(face, mFaceBody, 2));
@@ -447,15 +478,28 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 
 			@Override
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				if(spdIncreasing) player.changeSpd(1);
-				else player.changeSpd(-1);
+				if(spdIncreasing){
+					player.changeSpd(1);
+					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+				}
+				else{
+					player.changeSpd(-1);
+					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+				}
 				
-				if(player.getSpd()==6) spdIncreasing = false;
-				else if(player.getSpd()==2) spdIncreasing = true;
+				if(player.getSpd()==6){
+					spdIncreasing = false;
+					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+				}
+				else if(player.getSpd()==2){
+					spdIncreasing = true;
+					textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
+				}
 			}
 			
 		});
 		mDigitalOnScreenControl.attachChild(this.mRunButton);
+		mDigitalOnScreenControl.attachChild(textCenter);
 		mDigitalOnScreenControl.registerTouchArea(this.mRunButton);
 		
 		return mScene;

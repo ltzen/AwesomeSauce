@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Scores implements Serializable {
 	
-	private double id;
+	private int id;
 	private String name;
 	
 	// Constructor
-	public Scores(double id, String name){
+	public Scores(int id, String name){
 	    this.id = id;
 	    this.name = name;
 	}
 
 	// Getters & Setters
-	public double getId() {
+	public int getId() {
 	    return id;
 	}
-	public void setId(double id) {
+	public void setId(int id) {
 	    this.id = id;
 	}
 	public String getName() {

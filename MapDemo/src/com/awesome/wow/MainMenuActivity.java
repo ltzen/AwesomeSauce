@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class MainMenuActivity extends Activity {
 	
+	public int totalScore = 0;
+	
 	 @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
@@ -99,8 +101,10 @@ public class MainMenuActivity extends Activity {
 	            @Override
 				public void onClick(View v) {
 	                // Perform action on clicks  
+	            	Scores score1 = new Scores(totalScore, "12345");
 	                Intent intent = getPackageManager().getLaunchIntentForPackage("com.awesome.wow");
 	                intent.setClass(MainMenuActivity.this, PlayerActivity.class);
+	                intent.putExtra("toGame", score1);
 	                intent.setFlags(0);
 	                intent.setPackage(null);
 	                startActivity(intent);
@@ -116,6 +120,7 @@ public class MainMenuActivity extends Activity {
 	            	Intent i = getIntent();
 	            	Scores score = (Scores)i.getSerializableExtra("testObject");
 	            	button4.setText(score.getName());
+	            	totalScore = score.getId();
 	                // Perform action on clicks 
 	            	//if(MapService.active)
 	            	//{
