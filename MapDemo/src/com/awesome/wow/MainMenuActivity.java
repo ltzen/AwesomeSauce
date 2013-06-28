@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainMenuActivity extends Activity {
 	
 	public Scores totalScore;
 	public static Button button4;
+	public static TextView textView1;
 	public static boolean unlockScoreUpdate;
 	
 	 @Override
@@ -120,45 +122,38 @@ public class MainMenuActivity extends Activity {
 	        button4.setOnClickListener(new OnClickListener() {
 	            @Override
 				public void onClick(View v) {
-	            	
-	            	if(unlockScoreUpdate){
-	            		updateScore();
+
+	                //Perform action on clicks 
+	            	if(MapService.active)
+	            	{
+	            		stopService(new Intent(MainMenuActivity.this,MapService.class));
 	            	}
-	            	
-	                // Perform action on clicks 
-	            	//if(MapService.active)
-	            	//{
-	            	//	stopService(new Intent(MainMenuActivity.this,MapService.class));
-	            	//}
-	               // finish();
-	                
+	                finish();
 	            }
-	            
 	        });
 	        
+	        textView1 = (TextView) findViewById(R.id.textView1);
+	        
+        	if(unlockScoreUpdate){
+        		updateScore();
+        	}
 
 	 } // end onCreate
 	 
 	 
      public void updateScore(){
-     	
-     	try {
+    	 
      		Intent i = getIntent();
      		Scores score = (Scores)i.getSerializableExtra("testObject");
      		totalScore = score;
-     		//below line broke it
-     		//if(score.HP==score.HP){
-     			MainMenuActivity.button4.setText("value 0!");
-     		//}
-     		MainMenuActivity.button4.setText(Integer.toString(score.HP));
      		
-     			
-     			//MainMenuActivity.button4.setText("try block ran");
-     	}
-     	finally {
-     		//MainMenuActivity.button4.setText("finally block ran");
-     	}
-     	
+     		MainMenuActivity.textView1.setText("Global stats: "+
+     				"HP="+Integer.toString(score.HP)+", "+
+     				"strength="+Integer.toString(score.strength)+", "+
+     				"speed="+Integer.toString(score.speed)+", "+
+     				"stamina="+Integer.toString(score.stamina)+", "+
+     				"fatigue="+Integer.toString(score.fatigue)
+     				);
      }
 	 
 	 
