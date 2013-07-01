@@ -265,19 +265,12 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 	
 	@Override
 	protected void onCreateResources() {
-		
-		countExercise();
-		
-		// Wanna make some text
+
+		// Font for the in-game text
         this.mFontTexture = new BitmapTextureAtlas(this.mEngine.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
         this.mFont = new Font(null, this.mFontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.BLACK);
-
         this.mEngine.getTextureManager().loadTexture(this.mFontTexture);
         this.getFontManager().loadFont(this.mFont);
-
-		
-		
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		// Control texture
@@ -377,6 +370,9 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			}
 		});
 		
+		// Player's ability incremented after creation with default values (hard-coded above)
+		countExercise();
+		
 		// Create the enemy sprite and add it to the scene
 		enemy = new Enemy(new int[]{2,1,1,2}, 26*TILE_DIM, 25*TILE_DIM, this.mEnemyTextureRegion, this.getVertexBufferObjectManager());
 		final FixtureDef enemyFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
@@ -422,7 +418,8 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		});
 		
 		// Text
-        final Text textCenter = new Text(50f, 50f, this.mFont, "Speed: 1", this.mEngine.getVertexBufferObjectManager());
+        final Text textCenter = new Text(50f, 50f, this.mFont, "Strength: "+Integer.toString(player.getStren())+"\nSpeed: "+
+        						Integer.toString(player.getSpd()), this.mEngine.getVertexBufferObjectManager());
 		
 		// Update handlers
 		enemy.registerUpdateHandler(makeTimer(enemy, mEnemyBody, 2));
@@ -479,20 +476,29 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				if(spdIncreasing){
 					player.changeSpd(1);
+					textCenter.setText("Strength: "+Integer.toString(player.getStren())
+							+"\nSpeed: "+Integer.toString(player.getSpd()));
+					
 					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
-					textCenter.setText(Integer.toString(hp_enable));
+					//textCenter.setText(Integer.toString(player.getStren()));
 				}
 				else{
 					player.changeSpd(-1);
+					textCenter.setText("Strength: "+Integer.toString(player.getStren())
+							+"\nSpeed: "+Integer.toString(player.getSpd()));
 					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
 				}
 				
 				if(player.getSpd()==6){
 					spdIncreasing = false;
+					textCenter.setText("Strength: "+Integer.toString(player.getStren())
+							+"\nSpeed: "+Integer.toString(player.getSpd()));
 					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
 				}
 				else if(player.getSpd()==2){
 					spdIncreasing = true;
+					textCenter.setText("Strength: "+Integer.toString(player.getStren())
+							+"\nSpeed: "+Integer.toString(player.getSpd()));
 					//textCenter.setText("Speed: "+Integer.toString(player.getSpd()));
 				}
 			}
@@ -552,7 +558,13 @@ public class PlayerActivity extends SimpleBaseGameActivity{
 		// Bring in count from MainMenuActivity
 		Intent currentIntent = getIntent();
 		Scores receivedScore = (Scores)currentIntent.getSerializableExtra("toGame");
-		hp_enable = receivedScore.HP;
+		
+		// Augment player's ability with the credits
+		player.changeHP(receivedScore.HP);
+		player.changeStren(receivedScore.strength);
+		player.changeSpd(receivedScore.speed);
+		player.changeStam(receivedScore.stamina);
+		player.changeFatg(receivedScore.fatigue);
 	}
 	
 	//can remove if public

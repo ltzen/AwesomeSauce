@@ -139,21 +139,21 @@ public class AccelerometerDataActivity extends Activity implements SensorEventLi
 			public void onClick(View v) {
                 // Perform action on clicks  
             	
-            	// We want to save the values now
-            	//steps = 0;
-            	//jacks = 0;
-            	//crunches = 0;
-            	MainMenuActivity.unlockScoreUpdate = true;
-            	Scores score = new Scores();
-            	
             	// Calculate credits for exercise
+            	// Right now it's using crunches
+            	Scores score = new Scores();
             	score.HP = 1;
-            	score.strength = 1;
-            	score.speed = 1;
+            	score.strength = crunches;
+            	score.speed = jacks;
             	score.stamina = 1;
             	score.fatigue = 1;
             	
-            	
+            	// Values saved, ok to clear now
+            	steps = 0;
+            	jacks = 0;
+            	crunches = 0;
+            	MainMenuActivity.unlockScoreUpdate = true;
+     		
                 Intent intent = getPackageManager().getLaunchIntentForPackage("com.awesome.wow");
                 intent.setClass(AccelerometerDataActivity.this, MainMenuActivity.class);
                 intent.putExtra("testObject", score);

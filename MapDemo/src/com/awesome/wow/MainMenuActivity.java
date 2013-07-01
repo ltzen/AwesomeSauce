@@ -109,7 +109,7 @@ public class MainMenuActivity extends Activity {
 	            	Scores score1 = new Scores();
 	                Intent intent = getPackageManager().getLaunchIntentForPackage("com.awesome.wow");
 	                intent.setClass(MainMenuActivity.this, PlayerActivity.class);
-	                intent.putExtra("toGame", score1);
+	                intent.putExtra("toGame", totalScore);
 	                intent.setFlags(0);
 	                intent.setPackage(null);
 	                startActivity(intent);
